@@ -57,7 +57,7 @@ function removeFile(FilePath) {
 router.get('/', async (req, res) => {
     const id = giftedid();
     let num = req.query.number;
-    async function GIFTED_PAIR_CODE() {
+    async function SNAPDRAGON_PAIR_CODE() {
         const {
             state,
             saveCreds
@@ -72,18 +72,18 @@ router.get('/', async (req, res) => {
                 logger: pino({ level: "fatal" }).child({ level: "fatal" }),
                 browser: Browsers.macOS("Safari")
             });
-            if (!Gifted.authState.creds.registered) {
+            if (!Snapdragon.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await Gifted.requestPairingCode(num);
+                const code = await Snapdragon.requestPairingCode(num);
                 console.log(`Your Code: ${code}`);
                 if (!res.headersSent) {
                     await res.send({ code });
                 }
             }
 
-            Gifted.ev.on('creds.update', saveCreds);
-            Gifted.ev.on("connection.update", async (s) => {
+            Snapdragon.ev.on('creds.update', saveCreds);
+            Snapdragon.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
 
                 if (connection == "open") {
@@ -96,27 +96,27 @@ router.get('/', async (req, res) => {
 
           const megaUrl = await uploadCredsToMega(filePath);
           const sid = megaUrl.includes("https://mega.nz/file/")
-            ? 'Gifted~' + megaUrl.split("https://mega.nz/file/")[1]
+            ? 'Snapdragon~' + megaUrl.split("https://mega.nz/file/")[1]
             : 'Error: Invalid URL';
           
           console.log(`Session ID: ${sid}`);
 
-                    const session = await Gifted.sendMessage(Gifted.user.id, { text: sid }, { disappearingMessagesInChat: true, ephemeralExpiration: 600, });
+                    const session = await Snapdragon.sendMessage(Snapdragon.user.id, { text: sid }, { disappearingMessagesInChat: true, ephemeralExpiration: 600, });
 
-                    const GIFTED_TEXT = `
+                    const SNAPDRAGON_TEXT = `
 *✅sᴇssɪᴏɴ ɪᴅ ɢᴇɴᴇʀᴀᴛᴇᴅ✅*
 ______________________________
 ╔════◇
-║『 𝐘𝐎𝐔'𝐕𝐄 𝐂𝐇𝐎𝐒𝐄𝐍 𝐆𝐈𝐅𝐓𝐄𝐃 𝐌𝐃 』
+║『 𝐘𝐎𝐔'𝐕𝐄 𝐂𝐇𝐎𝐒𝐄𝐍 SNAPDRAGON 𝐌𝐃 』
 ║ You've Completed the First Step
 ║ to Deploy a Whatsapp Bot.
 ╚══════════════╝
 ╔═════◇
 ║ 『••• 𝗩𝗶𝘀𝗶𝘁 𝗙𝗼𝗿 𝗛𝗲𝗹𝗽 •••』
 ║❒ 𝐓𝐮𝐭𝐨𝐫𝐢𝐚𝐥: _youtube.com/@giftedtechnexus_
-║❒ 𝐎𝐰𝐧𝐞𝐫: _https://t.me/mouricedevs_
-║❒ 𝐑𝐞𝐩𝐨: _https://github.com/mouricedevs/gifted_
-║❒ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: _https://whatsapp.com/channel/0029VaYauR9ISTkHTj4xvi1l_
+║❒ 𝐎𝐰𝐧𝐞𝐫: _https://t.me/snapdragon_
+║❒ 𝐑𝐞𝐩𝐨: _https://github.com/Viniznimco/SNAPDRAGON-JET-MD_
+║❒ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: _https://whatsapp.com/channel/0029Vb6jFwj89ine3b7qHB1y_
 ║ 💜💜💜
 ╚══════════════╝ 
  𝗚𝗜𝗙𝗧𝗘𝗗-𝗠𝗗 𝗩𝗘𝗥𝗦𝗜𝗢𝗡 5.𝟬.𝟬
@@ -125,14 +125,14 @@ ______________________________
 Use your Session ID Above to Deploy your Bot.
 Check on YouTube Channel for Deployment Procedure(Ensure you have Github Account and Billed Heroku Account First.)
 Don't Forget To Give Star⭐ To My Repo`;
-                    await Gifted.sendMessage(Gifted.user.id, { text: GIFTED_TEXT }, { quoted: session },  { disappearingMessagesInChat: true, ephemeralExpiration: 600, });
+                    await Snapdragon.sendMessage(Snapdragon.user.id, { text: SNAPDRAGON_TEXT }, { quoted: session },  { disappearingMessagesInChat: true, ephemeralExpiration: 600, });
 
                     await delay(100);
-                    await Gifted.ws.close();
+                    await Snapdragon.ws.close();
                     return await removeFile('./temp/' + id);
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
                     await delay(10000);
-                    GIFTED_PAIR_CODE();
+                    SNAPDRAGON_PAIR_CODE();
                 }
             });
         } catch (err) {
@@ -144,7 +144,7 @@ Don't Forget To Give Star⭐ To My Repo`;
         }
     }
 
-    return await GIFTED_PAIR_CODE();
+    return await SNAPDRAGON_PAIR_CODE();
 });
 
 module.exports = router;
